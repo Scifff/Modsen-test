@@ -18,6 +18,13 @@ body {
     height: 100vh;
 }
 
+/* .test {
+    position: absolute; 
+    background-color: #000000;
+    height: 100%;
+    width: 100%;
+} */
+
 .quiz {
     position: relative;
     padding: 2rem 2rem calc(2rem + 70px);
@@ -35,6 +42,14 @@ body {
     padding: 1rem 0;
     text-align: center;
     margin: 0;
+}
+
+.indicator {
+    padding: 1rem 0;
+    margin: 0;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 700;
 }
 
 .summary {
@@ -141,4 +156,8 @@ body {
     backface-visibility: hidden;
     perspective: 1000px;
     color: #94ca00;
+}
+
+.nonVisible{
+    display: none;
 }

@@ -9,32 +9,14 @@
 </head>
 <body>
     
-    <div class="quiz" id="quiz">
-        <div class="quiz-header" id="header">
-            <h2 class="title">Загружаем вопрос...</h2>
-
-            <h2 class="title">%title%</h2>
-            <h3 class="summary">%message%</h3>
-            <p class="result">%result%</p>
-        </div>
-
-        <ul class="quiz-list" id="list">
-            <li>
-                <label>
-                    <input type="radio" class="answer" name="answer">
-                    <span>Ответ...</span>
-                </label>
-            </li>
-            <li>
-                <label>
-                    <input type="radio" class="answer" name = 'answer'>
-                    <span>Ответ...</span>
-                </label>
-            </li>
-        </ul>
+    <div class="quiz">
+        <div class="quiz-header" id="header"></div>
+        <ul class="indicator" id ="indicator"></ul>
+        <ul class="quiz-list" id="list"></ul>
         <button class="quiz-submit submit" id = "submit">Next</button>
     </div>
-
+    
+    <script src="./constants/constants.js"></script>
     <script src="./script.js"></script>
 </body>
 </html>
