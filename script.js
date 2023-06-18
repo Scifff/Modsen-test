@@ -3,21 +3,39 @@ const headerContainer = document.querySelector('#header');
 const listContainer = document.querySelector('#list');
 const submitButton = document.querySelector('#submit');
 const indicator = document.getElementById('indicator');
+const themeSwitchButton = document.getElementById('themeSwitchButton');
+const timer = document.getElementById('timer');
 
 
 let score = 0;
 let questionIndex = 0;
 let currentQuestion = 1;
+let time = 20;
 
 clearPage();
 showQuestion();
+//timer();
 
 
 submitButton.onclick = checkAnswer;
+themeSwitchButton.onclick = switchTheme;
+
 
 function clearPage(){
     headerContainer.innerHTML = '';
     listContainer.innerHTML = '';
+};
+
+function switchTheme() {
+    
+        if(quiz.classList.contains('darkTheme')){
+            document.body.style.background = 'linear-gradient( to right, #f7797d, #fbd786, #c6ffdd)';
+            quiz.classList.remove('darkTheme');
+            
+        }else{
+            document.body.style.background = 'linear-gradient( to right, #50174d, #1f2c77, #000000)';
+            quiz.classList.add('darkTheme');
+        }
 };
 
 
@@ -60,17 +78,25 @@ function checkAnswer(){
     currentQuestion++;
     if (userAnswer === questions[questionIndex]['correct']) {
         score++;
-    }
+        submit.style.backgroundColor = 'green';
+        setTimeout(() => submit.style.backgroundColor = 'purple', 200);
+    } else {
+        submit.style.backgroundColor = 'red';
+        setTimeout(() => submit.style.backgroundColor = 'purple', 200);
+    };
+
     if (questionIndex !== questions.length - 1){
         questionIndex++;
         clearPage();
         showQuestion();
         return;
     } else {
+        submit.style.backgroundColor = 'purple'
         clearPage();
         showResults();
     }
-}
+};
+
 function showResults() {
     indicator.classList.add('nonVisible');
 
@@ -107,4 +133,8 @@ function showResults() {
         submitButton.blur();
         submitButton.innerText = 'Restart';
         submitButton.onclick = () =>{history.go()};
-}
+};
+
+// function timer(){
+
+// };
