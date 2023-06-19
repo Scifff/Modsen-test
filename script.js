@@ -10,11 +10,13 @@ const timer = document.getElementById('timer');
 let score = 0;
 let questionIndex = 0;
 let currentQuestion = 1;
-let time = 20;
+let time = 0;
+const timeForQuestion = 10;
+time = timeForQuestion * questions.length;
 
 clearPage();
 showQuestion();
-// timer();
+setInterval(Changetimer,1000);
 
 
 submitButton.onclick = checkAnswer;
@@ -45,7 +47,7 @@ function showQuestion(){
     const headerTemplate = `<h2 class="title">%title%</h2>`;
     const title = headerTemplate.replace('%title%', questions[questionIndex]['question']);
     headerContainer.innerHTML = title;
-
+    // time = 10;
     let answerNumber = 1;
     for (answerText of questions[questionIndex]['answers']) {
         const questionTemplate = 
@@ -90,16 +92,17 @@ function checkAnswer(){
         clearPage();
         showQuestion();
         return;
+
     } else {
         submit.style.backgroundColor = 'purple'
         clearPage();
         showResults();
-    }
+    }  
 };
 
 function showResults() {
     indicator.classList.add('nonVisible');
-
+    timer.style.display = 'none';
     const resultsTemplate = `
         <h2 class="title">%title%</h2>
         <h3 class="summary">%message%</h3>
@@ -129,14 +132,28 @@ function showResults() {
                                     .replace('%message%', message)
                                     .replace('%result%', result)
         headerContainer.innerHTML = finalMessage;
-
+        
         submitButton.blur();
         submitButton.innerText = 'Restart';
         submitButton.onclick = () =>{history.go()};
 };
 
-// function timer(){
-//     time = time < 10 ? "0" + time : time;
-//     timer.innerHTML = `${time}`;
-//     time--;
-// };
+function Changetimer(){
+
+    time = time < 10 ? "0" + time : time;
+    timer.innerHTML = `${time}`;
+    time--;
+
+     if(time < 0){
+        clearPage();
+        showResults();
+        // questionIndex++;
+        // currentQuestion++
+        // clearPage()
+        // showQuestion()
+        // submit.style.backgroundColor = 'red';
+        // setTimeout(() => submit.style.backgroundColor = 'purple', 200);
+        
+    }
+};
+
