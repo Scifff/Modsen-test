@@ -14,7 +14,7 @@ let time = 20;
 
 clearPage();
 showQuestion();
-//timer();
+// timer();
 
 
 submitButton.onclick = checkAnswer;
@@ -136,5 +136,7 @@ function showResults() {
 };
 
 // function timer(){
-
+//     time = time < 10 ? "0" + time : time;
+//     timer.innerHTML = `${time}`;
+//     time--;
 // };
