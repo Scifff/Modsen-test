@@ -6,14 +6,20 @@ const indicator = document.getElementById('indicator');
 const themeSwitchButton = document.getElementById('themeSwitchButton');
 const timer = document.getElementById('timer');
 
+const LS = localStorage;
 
 let score = 0;
-let questionIndex = 0;
-let currentQuestion = 1;
-let time = 0;
+let questionIndex;
+let time;
 const timeForQuestion = 10;
-time = timeForQuestion * questions.length;
 
+
+JSON.parse(LS.getItem('CurrentState')) === null ? questionIndex = 0 : questionIndex = JSON.parse(LS.getItem('CurrentState'));
+JSON.parse(LS.getItem('time')) === null ? time = timeForQuestion * questions.length : time = JSON.parse(LS.getItem('time'));
+JSON.parse(LS.getItem('CurrentTheme') === null) ? theme = 0 : theme = JSON.parse(LS.getItem('CurrentTheme'));
+
+
+themeSave(theme);
 clearPage();
 showQuestion();
 setInterval(Changetimer,1000);
@@ -22,32 +28,41 @@ setInterval(Changetimer,1000);
 submitButton.onclick = checkAnswer;
 themeSwitchButton.onclick = switchTheme;
 
-
 function clearPage(){
     headerContainer.innerHTML = '';
     listContainer.innerHTML = '';
 };
 
+function themeSave() {
+    if(theme === 1){
+        document.body.style.background = 'linear-gradient( to right, #50174d, #1f2c77, #000000)';
+        quiz.classList.add('darkTheme');
+    }
+}
+
 function switchTheme() {
-    
         if(quiz.classList.contains('darkTheme')){
             document.body.style.background = 'linear-gradient( to right, #f7797d, #fbd786, #c6ffdd)';
             quiz.classList.remove('darkTheme');
+            theme = 0;
+            LS.setItem('CurrentTheme',JSON.stringify(theme));
             
         }else{
             document.body.style.background = 'linear-gradient( to right, #50174d, #1f2c77, #000000)';
             quiz.classList.add('darkTheme');
+            theme = 1;
+            LS.setItem('CurrentTheme',JSON.stringify(theme));
         }
 };
-
-
 
 function showQuestion(){
  
     const headerTemplate = `<h2 class="title">%title%</h2>`;
     const title = headerTemplate.replace('%title%', questions[questionIndex]['question']);
-    headerContainer.innerHTML = title;
-    // time = 10;
+    headerContainer.innerHTML = title; 
+
+    LS.setItem('CurrentState',questionIndex);
+    
     let answerNumber = 1;
     for (answerText of questions[questionIndex]['answers']) {
         const questionTemplate = 
@@ -62,7 +77,7 @@ function showQuestion(){
                             .replace('%number%', answerNumber)
         listContainer.innerHTML += answerHTML;
 
-        indicator.innerHTML = `${currentQuestion}/${questions.length}`
+        indicator.innerHTML = `${questionIndex + 1}/${questions.length}`
 
         answerNumber++;
     }
@@ -77,7 +92,6 @@ function checkAnswer(){
 
     const userAnswer = parseInt(checkedRadio.value)
 
-    currentQuestion++;
     if (userAnswer === questions[questionIndex]['correct']) {
         score++;
         submit.style.backgroundColor = 'green';
@@ -89,6 +103,7 @@ function checkAnswer(){
 
     if (questionIndex !== questions.length - 1){
         questionIndex++;
+        LS.setItem('CurrentState',questionIndex);
         clearPage();
         showQuestion();
         return;
@@ -133,9 +148,16 @@ function showResults() {
                                     .replace('%result%', result)
         headerContainer.innerHTML = finalMessage;
         
+
         submitButton.blur();
         submitButton.innerText = 'Restart';
-        submitButton.onclick = () =>{history.go()};
+        if (LS.getItem('CurrentState') >= questions.length - 1) {
+            LS.setItem('CurrentState', 0)
+        }
+        submitButton.onclick = () =>{
+            history.go()
+            LS.setItem('time', timeForQuestion * questions.length)
+        };
 };
 
 function Changetimer(){
@@ -143,17 +165,9 @@ function Changetimer(){
     time = time < 10 ? "0" + time : time;
     timer.innerHTML = `${time}`;
     time--;
-
+    LS.setItem('time',JSON.stringify(time));
      if(time < 0){
         clearPage();
         showResults();
-        // questionIndex++;
-        // currentQuestion++
-        // clearPage()
-        // showQuestion()
-        // submit.style.backgroundColor = 'red';
-        // setTimeout(() => submit.style.backgroundColor = 'purple', 200);
-        
     }
 };
-
